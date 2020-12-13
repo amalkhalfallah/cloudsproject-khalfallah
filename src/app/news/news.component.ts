@@ -4,6 +4,7 @@ import { WorldwideService } from 'src/app/Services/worldwide.service';
 import { CountryService } from '../services/country.service';
 import { news } from 'src/app/models/news';
 import { FormGroup, FormControl } from '@angular/forms';
+import { AuthService } from 'src/app/Services/auth.service';
 
 
 
@@ -15,6 +16,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class NewsComponent implements OnInit {
 
   Countries: Country[];
+  private newss
   news: news[];
   new: news = {
     country: "",
@@ -26,10 +28,11 @@ export class NewsComponent implements OnInit {
 
 
 
-  constructor(private WorldwideService: WorldwideService, private CountryService: CountryService) { }
+  constructor(public auth: AuthService, private WorldwideService: WorldwideService, private CountryService: CountryService) { }
 
 
   ngOnInit() {
+    this.getnews();
     this.getallcountries();
 
 
@@ -52,6 +55,21 @@ export class NewsComponent implements OnInit {
       }
     );
   }
+
+
+
+  getnews() {
+    return this.CountryService.getnews().subscribe(
+      data => {
+        this.newss = data;
+      },
+      err => console.error(err),
+      () => { }
+    );
+  }
+
+
+
 
   addnews() {
     this.new.country = this.newsForm.value.country,

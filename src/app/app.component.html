@@ -1,4 +1,60 @@
 <div class="container my-5">
+  <nav _ngcontent-ckl-c36="" class="navbar navbar-expand-md bg-dark navbar-dark mb-3">
+    <button _ngcontent-ckl-c36="" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"
+      class="navbar-toggler">
+      <span _ngcontent-ckl-c36="" class="navbar-toggler-icon"></span>
+    </button>
+    <div _ngcontent-ckl-c36="" id="collapsibleNavbar" class="collapse navbar-collapse">
+      <ul _ngcontent-ckl-c36="" class="navbar-nav">
+        <li _ngcontent-ckl-c36="" class="nav-item">
+          <a _ngcontent-ckl-c36="" routerlink="worldwide" routerlinkactive="active" class="nav-link"
+            href="/worldwide">Worldwide</a>
+        </li>
+        <li _ngcontent-ckl-c36="" class="nav-item">
+          <a _ngcontent-ckl-c36="" routerlink="news" routerlinkactive="active" class="nav-link" href="/news">News</a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+  <!-- User NOT logged in -->
+  <ng-template #guest>
+    <h5>Hello, GUEST</h5>
+    <p>Login to get started...</p>
+
+    <button class="btn btn-info" style="float: right;  margin-top: 3px;
+  margin-right: 4px;
+  position:absolute;
+  top:0;
+  right:0;" (click)="auth.googleSignin()">
+      <i class="fa fa-google"></i> Connect Google
+    </button>
+
+  </ng-template>
+
+
+  <!-- User logged in -->
+  <ng-template #authenticated>
+    <div *ngIf="auth.user$ | async as user">
+      <h5>Hello, {{ user.displayName }}</h5>
+      <button class="btn btn-info" style="float: right;  margin-top: 3px;
+      margin-right: 4px;
+      position:absolute;
+      top:0;
+      right:0;" (click)="auth.signOut()">Logout</button>
+    </div>
+  </ng-template>
+  <div *ngIf="auth.user$ | async; then authenticated else guest">
+    <!-- template will replace this div -->
+  </div>
+  <center>
+    <img
+      src="https://firebasestorage.googleapis.com/v0/b/covid19-1fdd8.appspot.com/o/corona.png?alt=media&token=44be429c-5e4b-41e4-9e36-c675fda66533"
+      width="40" height="40" alt="Corona icon"> <span style="font-size:150%;font-weight:bold;">COVID-19 </span>
+    <h4 style="color:#CECECE;">Live Updates and Statistics</h4>
+
+
+  </center>
   <router-outlet>
   </router-outlet>
 </div>

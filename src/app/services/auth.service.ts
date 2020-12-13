@@ -56,6 +56,9 @@ export class AuthService {
     await this.afAuth.signOut();
     this.router.navigate(['/']);
   }
+  public getuserleg() {
+    return this.afs.collection('legusers').valueChanges();
+  }
 
 
 

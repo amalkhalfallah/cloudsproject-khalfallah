@@ -1,41 +1,3 @@
-<div *ngIf="auth.user$ | async; then authenticated else guest">
-    <!-- template will replace this div -->
-</div>
-
-<!-- User NOT logged in -->
-<ng-template #guest>
-    <h3>Hello, GUEST</h3>
-    <p>Login to get started...</p>
-
-    <button class="btn btn-info" style="float: right;  margin-top: 3px;
-    margin-right: 4px;
-    position:absolute;
-    top:0;
-    right:0;" (click)="auth.googleSignin()">
-        <i class="fa fa-google"></i> Connect Google
-    </button>
-
-</ng-template>
-
-
-<!-- User logged in -->
-<ng-template #authenticated>
-    <div *ngIf="auth.user$ | async as user">
-        <h3>Hello, {{ user.displayName }}</h3>
-        <a [routerLink]="['/news']">Add news</a>
-        <button class="btn btn-info" style="float: right;  margin-top: 3px;
-        margin-right: 4px;
-        position:absolute;
-        top:0;
-        right:0;" (click)="auth.signOut()">Logout</button>
-    </div>
-</ng-template>
-
-
-
-
-
-
 <div class="my-3">
     <table class='table borderless'>
         <thead>
@@ -202,42 +164,6 @@
                     </tr>
                 <tbody>
             </table>
-
-
-            <div class="my-3">
-                <table class='table borderless'>
-                    <thead>
-                        <tr>
-                            <td style="background-color:#F6FAFB;font-weight:bold;">
-                                News from User
-
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-
-            <table class="table table-bordered table-striped">
-                <th style="background-color:#F6FAFB"> Country</th>
-                <th style="background-color:#F6FAFB"> News</th>
-
-                <tbody>
-                    <tr *ngFor="let h of news">
-
-                        <td>{{ h.country }}</td>
-                        <td>{{ h.newss }}</td>
-
-                    </tr>
-                </tbody>
-            </table>
-
-
-
-
-
-
-
-
 
             <div class="my-3">
                 <table class='table borderless'>

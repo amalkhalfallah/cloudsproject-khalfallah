@@ -1,19 +1,38 @@
-<h1>Add news</h1>
+<h1>news</h1>
 
-<form [formGroup]="newsForm">
-    <div class="form-group">
-        <label for="exampleFormControlInput1">Country</label> &nbsp;
 
-        <select formControlName="country" id="Countries" class="form-control">
-            <option *ngFor="let h of Countries.Countries" [value]="h.CountryCode">
-                {{h.Country}}
-            </option>
-        </select>
-    </div>
+<table class="table table-bordered table-striped">
+    <th style="background-color:#F6FAFB"> Country</th>
+    <th style="background-color:#F6FAFB"> News</th>
 
-    <label for="exampleFormControlTextarea1"> News</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="news"></textarea>
+    <tbody>
+        <tr *ngFor="let h of newss">
 
-</form>
-<br>
-<button class="btn btn-info" (click)="addnews()"> submit </button>
+            <td>{{ h.country }}</td>
+            <td>{{ h.newss }}</td>
+
+        </tr>
+    </tbody>
+</table>
+
+
+
+<div *ngIf="auth.user$ | async as user">
+    <form [formGroup]="newsForm">
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Country</label> &nbsp;
+
+            <select formControlName="country" id="Countries" class="form-control">
+                <option *ngFor="let h of Countries.Countries" [value]="h.CountryCode">
+                    {{h.Country}}
+                </option>
+            </select>
+        </div>
+
+        <label for="exampleFormControlTextarea1"> News</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="news"></textarea>
+
+    </form>
+    <br>
+    <button class="btn btn-info" (click)="addnews()"> submit </button>
+</div>

@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { WorldwideService } from 'src/app/Services/worldwide.service';
-import { AuthService } from 'src/app/Services/auth.service';
-
 import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
 import { SingleDataSet, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 import { Global } from 'src/app/models/Global';
@@ -44,7 +42,7 @@ export class WorldwideComponent implements OnInit {
   Death: Array<number> = []
   Recovered: Array<number> = []
   Confirmed: Array<number> = []
-  private news
+
 
 
   public pieChartLabels: Label[] = [['Dead Cases'], ['Recovered Cases'], 'Active Cases'];;
@@ -106,7 +104,7 @@ export class WorldwideComponent implements OnInit {
   myDate = new Date();
   private today;
   private seven
-  constructor(public auth: AuthService, private WorldwideService: WorldwideService, private datePipe: DatePipe, private CountryService: CountryService) {
+  constructor(private WorldwideService: WorldwideService, private datePipe: DatePipe, private CountryService: CountryService) {
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
     var myCurrentDate = new Date();
@@ -125,19 +123,10 @@ export class WorldwideComponent implements OnInit {
     this.getallcountries();
     this.getagetTotalydate();
     this.getagetTotalApril();
-    this.getnews();
+
 
   }
 
-  getnews() {
-    return this.CountryService.getnews().subscribe(
-      data => {
-        this.news = data;
-      },
-      err => console.error(err),
-      () => { }
-    );
-  }
 
 
   getGlobal() {
