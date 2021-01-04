@@ -1,3 +1,7 @@
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
 <div class="my-3">
     <table class='table borderless'>
         <thead>
@@ -13,26 +17,26 @@
         <tr style="background-color:#FDE29D">
 
             <td> Total Cases</td>
-            <td>{{ Global.Global.TotalConfirmed }}</td>
+            <td>{{ Global.Global.TotalConfirmed | number:'1.0':'en-US' }}</td>
 
         </tr>
         <tr style="background-color:#FDE29D">
             <td> New Cases</td>
-            <td>{{ Global.Global.NewConfirmed }}</td>
+            <td>{{ Global.Global.NewConfirmed | number:'1.0':'en-US'}}</td>
         </tr>
         <tr style="background-color:#FDE29D">
             <td> Active Cases</td>
-            <td>{{ Global.Global.TotalConfirmed - Global.Global.TotalRecovered }}</td>
+            <td>{{ Global.Global.TotalConfirmed - Global.Global.TotalRecovered | number:'1.0':'en-US'}}</td>
         </tr>
         <tr style="background-color:#87C7F3">
 
             <td> Total Recovered</td>
-            <td>{{ Global.Global.TotalRecovered }}</td>
+            <td>{{ Global.Global.TotalRecovered | number:'1.0':'en-US'}}</td>
 
         </tr>
         <tr style="background-color:#87C7F3">
             <td> New Recovered</td>
-            <td>{{ Global.Global.NewRecovered }}</td>
+            <td>{{ Global.Global.NewRecovered | number:'1.0':'en-US' }}</td>
 
         </tr>
         <tr style="background-color:#87C7F3">
@@ -43,12 +47,12 @@
         <tr style="background-color:#ED97AB">
 
             <td> Total Deaths</td>
-            <td>{{ Global.Global.TotalDeaths }}</td>
+            <td>{{ Global.Global.TotalDeaths | number:'1.0':'en-US'}}</td>
 
         </tr>
         <tr style="background-color:#ED97AB">
             <td> New Deaths</td>
-            <td>{{ Global.Global.NewDeaths }}</td>
+            <td>{{ Global.Global.NewDeaths | number:'1.0':'en-US'}}</td>
 
         </tr>
         <tr style="background-color:#ED97AB">
@@ -73,7 +77,7 @@
 
     <div class="chart-wrapper">
         <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
-            [options]="pieChartOptions" [legend]="pieChartLegend" [colors]="pieChartColors">
+            [options]="pieChartOptions" [colors]="pieChartColors">
         </canvas>
     </div>
 </div>
@@ -96,87 +100,103 @@
 
 
     <div class="chartjs-container">
-        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
-            [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [chartType]="barChartType">
         </canvas>
     </div>
     <br>
+</div>
 
 
 
 
-    <div class="my-3">
-        <table class='table borderless'>
-            <thead>
-                <tr>
-                    <td style="background-color:#F6FAFB;font-weight:bold;">
-                        Total Corona Virus Cases Worldwide
+<div class="my-3">
+    <table class='table borderless'>
+        <thead>
+            <tr>
+                <td style="background-color:#F6FAFB;font-weight:bold;">
+                    Total Corona Virus Cases Worldwide
 
-                    </td>
-                </tr>
-            </thead>
-        </table>
-
-
-
-        <div class="chartjs-container">
-            <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
-                [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
-                [plugins]="lineChartPlugins" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-            </canvas>
-        </div>
+                </td>
+            </tr>
+        </thead>
+    </table>
 
 
 
-
-        <div class="my-3">
-            <table class='table borderless'>
-                <thead>
-                    <tr>
-                        <td style="background-color:#F6FAFB;font-weight:bold;">
-                            Corona Virus Cases by Country
-
-                        </td>
-                    </tr>
-                </thead>
-            </table>
+    <div class="chartjs-container">
+        <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [colors]="lineChartColors"
+            [chartType]="lineChartType">
+        </canvas>
+    </div>
+</div>
 
 
-            <table class="table table-bordered table-striped">
-                <th style="background-color:#6C767D"> Country</th>
-                <th style="background-color:#FDE29D"> New Cases</th>
-                <th style="background-color:#FDE29D"> Total Cases</th>
-                <th style="background-color:#87C7F3"> New Recoveries</th>
-                <th style="background-color:#87C7F3"> Total Recoveries</th>
-                <th style="background-color:#ED97AB"> New Deaths</th>
-                <th style="background-color:#ED97AB"> Total Deaths</th>
-                <tbody>
-                    <tr *ngFor="let h of Countries.Countries">
-                        <td style="background-color:#6C767D">
-                            <a [routerLink]="['/detail',h.CountryCode]" [state]=h>{{ h.Country }} </a>
-                        </td>
-                        <td style="background-color:#FDE29D">{{ h.NewConfirmed }}</td>
-                        <td style="background-color:#FDE29D">{{ h.TotalConfirmed }}</td>
-                        <td style="background-color:#87C7F3">{{ h.NewRecovered }}</td>
-                        <td style="background-color:#87C7F3">{{ h.TotalRecovered }}</td>
-                        <td style="background-color:#ED97AB">{{ h.NewDeaths }}</td>
-                        <td style="background-color:#ED97AB">{{ h.TotalDeaths }}</td>
-                    </tr>
-                <tbody>
-            </table>
 
-            <div class="my-3">
-                <table class='table borderless'>
-                    <thead>
-                        <tr>
-                            <td style="background-color:#F6FAFB;font-weight:bold;">
-                                <center> Data source : <a href="https://covid19api.com/"> https://covid19api.com/
-                                        Johns
-                                        Hopkins
-                                        CSSE</a> </center>
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
 
-                <div>
+
+<div class="my-3">
+    <table class='table borderless'>
+        <thead>
+            <tr>
+                <td style="background-color:#F6FAFB;font-weight:bold;">
+                    Corona Virus Cases by Country
+
+                </td>
+            </tr>
+        </thead>
+    </table>
+
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th style="background-color:#6C767D">
+                <i class="fa fa-angle-up" (click)=" Sorttable()"> </i> <i class="fa fa-angle-down"
+                    (click)=" Sorttable()"> </i> &nbsp; Country
+            </th>
+            <th style="background-color:#FDE29D"> <i class="fa fa-angle-up" (click)=" Sorttable()"> </i> <i
+                    class="fa fa-angle-down" (click)=" Sorttable()"> </i> &nbsp;New Cases</th>
+            <th style="background-color:#FDE29D"> <i class="fa fa-angle-up" (click)=" Sorttable()"> </i> <i
+                    class="fa fa-angle-down" (click)=" Sorttable()"> </i> &nbsp; Total Cases</th>
+            <th style="background-color:#87C7F3"> <i class="fa fa-angle-up" (click)=" Sorttable()"> </i> <i
+                    class="fa fa-angle-down" (click)=" Sorttable()"> </i> &nbsp; New Recoveries</th>
+
+            <th style="background-color:#87C7F3"> <i class="fa fa-angle-up" (click)=" Sorttable()"> </i> <i
+                    class="fa fa-angle-down" (click)=" Sorttable()"> </i> &nbsp;Total Recoveries</th>
+            <th style="background-color:#ED97AB"> <i class="fa fa-angle-up" (click)=" Sorttable()"> </i> <i
+                    class="fa fa-angle-down" (click)=" Sorttable()"> </i> &nbsp; New Deaths</th>
+            <th style="background-color:#ED97AB"> <i class="fa fa-angle-up" (click)=" Sorttable()"> </i> <i
+                    class="fa fa-angle-down" (click)=" Sorttable()"> </i> &nbsp;Total Deaths</th>
+        </tr>
+        <tbody>
+            <tr></tr>
+            <tr *ngFor="let h of AllCountries.Countries">
+                <td style="background-color:#6C767D">
+                    <a [routerLink]="['/detail',h.CountryCode]" [state]=h style="color:white">{{ h.Country }}
+                    </a>
+                </td>
+                <td style="background-color:#FDE29D">{{ h.NewConfirmed | number:'1.0':'en-US'}}</td>
+                <td style="background-color:#FDE29D">{{ h.TotalConfirmed | number:'1.0':'en-US' }}</td>
+                <td style="background-color:#87C7F3">{{ h.NewRecovered | number:'1.0':'en-US' }}</td>
+                <td style="background-color:#87C7F3">{{ h.TotalRecovered | number:'1.0':'en-US'}}</td>
+                <td style="background-color:#ED97AB">{{ h.NewDeaths | number:'1.0':'en-US'}}</td>
+                <td style="background-color:#ED97AB">{{ h.TotalDeaths | number:'1.0':'en-US'}}</td>
+            </tr>
+        <tbody>
+    </table>
+</div>
+
+<div class="my-3">
+    <table class='table borderless'>
+        <thead>
+            <tr>
+                <td style="background-color:#F6FAFB;font-weight:bold;">
+                    <center> Data source : <a href="https://covid19api.com/"> https://covid19api.com/
+                            Johns
+                            Hopkins
+                            CSSE</a> </center>
+                </td>
+            </tr>
+        </thead>
+    </table>
+
+    <div>

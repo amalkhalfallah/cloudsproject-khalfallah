@@ -12,6 +12,8 @@ import { CountryService } from '../services/country.service';
 
 
 
+declare function Sorttable()
+
 
 @Component({
   selector: 'app-worldwide',
@@ -37,11 +39,10 @@ export class WorldwideComponent implements OnInit {
     }
   }
 
-  Countries: Country[];
+  Countries: Country[] = [];
+  AllCountries: Country[] = [];
   Countriess: Country[];
-  Death: Array<number> = []
-  Recovered: Array<number> = []
-  Confirmed: Array<number> = []
+
 
 
 
@@ -49,7 +50,6 @@ export class WorldwideComponent implements OnInit {
   public pieChartData: SingleDataSet = [];
   public pieChartType: ChartType = 'pie';
 
-  public pieChartLegend = true;
   public pieChartPlugins = [];
   public pieChartColors = [
     {
@@ -57,44 +57,20 @@ export class WorldwideComponent implements OnInit {
     },
   ];
 
-  dateObj = new Date();
-  month1 = this.dateObj.getUTCMonth() + 1; //months from 1-12
-  day1 = this.dateObj.getUTCDate();
-  month2 = this.dateObj.getUTCMonth() + 1;
-  day2 = this.dateObj.getUTCDate() - 1;
-  month3 = this.dateObj.getUTCMonth() + 1;
-  day3 = this.dateObj.getUTCDate() - 2;
-  month4 = this.dateObj.getUTCMonth() + 1;
-  day4 = this.dateObj.getUTCDate() - 3;
-  month5 = this.dateObj.getUTCMonth() + 1;
-  day5 = this.dateObj.getUTCDate() - 4;
-  month6 = this.dateObj.getUTCMonth() + 1;
-  day6 = this.dateObj.getUTCDate() - 5;
-  month7 = this.dateObj.getUTCMonth() + 1;
-  day7 = this.dateObj.getUTCDate() - 6;
 
 
-
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-    scales: { xAxes: [{}], yAxes: [{}] },
-  };
-  public barChartLabels: Label[] = ['' + this.day7 + '/' + this.month7, '' + this.day6 + '/' + this.month6, '' + this.day5 + '/' + this.month5, '' + this.day4 + '/' + this.month4, '' + this.day3 + '/' + this.month3, '' + this.day2 + '/' + this.month2, '' + this.day1 + '/' + this.month1];
+  public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
-  public barChartLegend = true;
-  public barChartPlugins = [];
   barChartData: ChartDataSets[] = [];
 
 
 
   lineChartData: ChartDataSets[] = [];
-  lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  lineChartLabels: Label[] = [];
   lineChartOptions: ChartOptions = {
     responsive: true
   };
-  lineChartLegend = true;
   lineChartType = 'line';
-  lineChartPlugins = [];
   private user = null;
 
 
@@ -102,21 +78,13 @@ export class WorldwideComponent implements OnInit {
 
 
   myDate = new Date();
-  private today;
-  private seven
   constructor(private WorldwideService: WorldwideService, private datePipe: DatePipe, private CountryService: CountryService) {
     monkeyPatchChartJsTooltip();
-    monkeyPatchChartJsLegend();
-    var myCurrentDate = new Date();
-    var myPastDate = new Date(myCurrentDate);
-    myPastDate.setDate(myPastDate.getDate() - 7);
-    this.myDate = new Date();
-
-    this.today = this.datePipe.transform(this.myDate, 'yyyy-MM-dd');
-    this.seven = this.datePipe.transform(myPastDate, 'yyyy-MM-dd');
-
+    monkeyPatchChartJsLegend()
 
   }
+
+
 
   ngOnInit() {
     this.getGlobal();
@@ -124,10 +92,11 @@ export class WorldwideComponent implements OnInit {
     this.getagetTotalydate();
     this.getagetTotalApril();
 
-
   }
 
-
+  Sorttable() {
+    Sorttable()
+  }
 
   getGlobal() {
     return this.WorldwideService.getGlobal().subscribe(
@@ -144,7 +113,7 @@ export class WorldwideComponent implements OnInit {
   getallcountries() {
     return this.WorldwideService.getCountries().subscribe(
       data => {
-        this.Countries = data;
+        this.AllCountries = data;
       },
       err => console.error(err),
       () => {
@@ -153,13 +122,14 @@ export class WorldwideComponent implements OnInit {
   }
 
   getagetTotalydate() {
-    return this.WorldwideService.getTotalydate(this.seven, this.today).subscribe(
+    return this.WorldwideService.getalldays().subscribe(
       data => {
         this.Countries = data;
       },
       err => console.error(err),
       () => {
-        for (let i = 0; i <= this.Countries.length; i++) {
+        this.barChartLabels = this.betweendates()
+        for (let i = this.Countries.length - 7; i < this.Countries.length; i++) {
           this.barChartData = [
             { data: [this.Countries[i].NewDeaths, this.Countries[i + 1].NewDeaths, this.Countries[i + 2].NewDeaths, this.Countries[i + 3].NewDeaths, this.Countries[i + 4].NewDeaths, this.Countries[i + 5].NewDeaths, this.Countries[i + 6].NewDeaths], label: 'Daily Deaths' },
             { data: [this.Countries[i].NewRecovered, this.Countries[i + 1].NewRecovered, this.Countries[i + 2].NewRecovered, this.Countries[i + 3].NewRecovered, this.Countries[i + 4].NewRecovered, this.Countries[i + 5].NewRecovered, this.Countries[i + 6].NewRecovered], label: 'Daily Recovered' },
@@ -171,27 +141,93 @@ export class WorldwideComponent implements OnInit {
     );
   }
 
-  getagetTotalApril() {
-    return this.WorldwideService.getTotalydate('2020-04-13', this.today).subscribe(
-      data => {
-        this.Countriess = data;
-      },
-      err => console.error(err),
-      () => {
-        for (var key in this.Countriess) {
-          this.Death.push(this.Countriess[key].TotalDeaths)
-          this.Recovered.push(this.Countriess[key].TotalRecovered)
-          this.Confirmed.push(this.Countriess[key].TotalConfirmed)
-        }
-        console.log(this.Death)
-        this.lineChartData = [
-          { data: this.Death, label: 'Total Deaths' },
-          { data: this.Recovered, label: 'Total Recovered' },
-          { data: this.Confirmed, label: 'Total Cases' }
-        ]
+  getalldaysfromapril() {
+    var tab = []
+    this.WorldwideService.getalldays().subscribe((data) => {
+      for (let i = 0; i < data.length; i++) {
+        var currentDate = new Date("2020-04-13T00:00:00");
+        var pastDate = new Date("2020-04-13T00:00:00");
+        var pipe = new DatePipe('en-US')
+        pastDate.setDate(currentDate.getDate() + i);
+        var from = pipe.transform(pastDate, 'dd-MMM')
+        tab.push(from)
       }
-    );
+    })
+    return tab
   }
+
+
+  betweendates() {
+    var tab = []
+    this.WorldwideService.getalldays().subscribe((data) => {
+      for (let i = data.length - 7; i < data.length; i++) {
+        var currentDate = new Date("2020-04-13T00:00:00");
+        var pastDate = new Date("2020-04-13T00:00:00");
+        var pipe = new DatePipe('en-US')
+        pastDate.setDate(currentDate.getDate() + i);
+        var from = pipe.transform(pastDate, 'dd-MMM')
+        tab.push(from)
+      }
+    })
+    return tab
+
+
+  }
+
+
+  getagetTotalApril() {
+
+
+    this.lineChartLabels = this.getalldaysfromapril()
+    this.lineChartData = [
+      { data: this.TotalDeaths(), label: 'Total Deaths' },
+      { data: this.getTotalRecovered(), label: 'Total Recovered' },
+      { data: this.getConfirmedTotal(), label: 'Total Cases' }
+    ]
+
+  }
+  getConfirmedTotal() {
+    var cleandata = []
+    this.WorldwideService.getalldays().subscribe((data) => {
+      cleandata.push(data[0]['TotalConfirmed'])
+      for (let i = 1; i < data.length; i++) {
+        cleandata.push(cleandata[i - 1] + data[i]['TotalConfirmed'])
+      }
+    }
+    )
+    return cleandata
+  }
+  getTotalRecovered() {
+    var cleandata = []
+    this.WorldwideService.getalldays().subscribe((data) => {
+      cleandata.push(data[0]['TotalRecovered'])
+      for (let i = 1; i < data.length; i++) {
+        cleandata.push(cleandata[i - 1] + data[i]['TotalRecovered'])
+      }
+    }
+    )
+    return cleandata
+  }
+
+  TotalDeaths() {
+    var cleandata = []
+    this.WorldwideService.getalldays().subscribe((data) => {
+      cleandata.push(data[0]['TotalDeaths'])
+      for (let i = 1; i < data.length; i++) {
+        cleandata.push(cleandata[i - 1] + data[i]['TotalDeaths'])
+      }
+    }
+    )
+    return cleandata
+  }
+
+
+
+
+
+
+
+
 }
 
 

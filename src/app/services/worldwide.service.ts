@@ -8,6 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from '../models/user';
 import firebase from 'firebase/app';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -51,6 +52,15 @@ export class WorldwideService {
       return this.http.get<Country[]>('https://api.covid19api.com/world?from=' + from + '&to=' + to, httpOptions);
 
     }
+  }
+
+  getalldays(): Observable<any> {
+    var currentDate = new Date();
+    var pipe = new DatePipe('en-US')
+    var to = pipe.transform(currentDate, 'yyyy-MM-dd')
+    const url = "https://api.covid19api.com/world?from=2020-03-01T00:00:00Z&to=" + to + 'T00:00:00Z'
+    return this.http.get<any>(url);
+
   }
 
 

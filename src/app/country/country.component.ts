@@ -30,6 +30,8 @@ export class CountryComponent implements OnInit {
   Death: Array<number> = []
   Recovered: Array<number> = []
   Confirmed: Array<number> = []
+  Dates: Array<string> = []
+  boo: boolean = false;
 
   private Countryy: Country = {
     "Country": "",
@@ -61,7 +63,6 @@ export class CountryComponent implements OnInit {
   public pieChartType: ChartType = 'pie';
 
   public pieChartLegend = true;
-  public pieChartPlugins = [];
   public pieChartColors = [
     {
       backgroundColor: ['#ED97AB', '#87C7F3', '#FDE29D']
@@ -74,21 +75,6 @@ export class CountryComponent implements OnInit {
 
 
 
-  dateObj = new Date();
-  month1 = this.dateObj.getUTCMonth() + 1; //months from 1-12
-  day1 = this.dateObj.getUTCDate();
-  month2 = this.dateObj.getUTCMonth() + 1;
-  day2 = this.dateObj.getUTCDate() - 1;
-  month3 = this.dateObj.getUTCMonth() + 1;
-  day3 = this.dateObj.getUTCDate() - 2;
-  month4 = this.dateObj.getUTCMonth() + 1;
-  day4 = this.dateObj.getUTCDate() - 3;
-  month5 = this.dateObj.getUTCMonth() + 1;
-  day5 = this.dateObj.getUTCDate() - 4;
-  month6 = this.dateObj.getUTCMonth() + 1;
-  day6 = this.dateObj.getUTCDate() - 5;
-  month7 = this.dateObj.getUTCMonth() + 1;
-  day7 = this.dateObj.getUTCDate() - 6;
 
 
 
@@ -96,42 +82,25 @@ export class CountryComponent implements OnInit {
     responsive: true,
     scales: { xAxes: [{}], yAxes: [{}] },
   };
-  public barChartLabels: Label[] = ['' + this.day7 + '/' + this.month7, '' + this.day6 + '/' + this.month6, '' + this.day5 + '/' + this.month5, '' + this.day4 + '/' + this.month4, '' + this.day3 + '/' + this.month3, '' + this.day2 + '/' + this.month2, '' + this.day1 + '/' + this.month1];
+  public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
-  public barChartPlugins = [];
-  barChartData: ChartDataSets[] = [];
+  public barChartData: ChartDataSets[] = [];
 
 
 
 
-  lineChartData: ChartDataSets[] = [];
-  lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  lineChartOptions: ChartOptions = {
-    responsive: true
-  };
-  lineChartLegend = true;
-  lineChartType = 'line';
-  lineChartPlugins = [];
-
-
-
-  myDate = new Date();
-  private today;
-  private seven
+  public lineChartData: ChartDataSets[] = [];
+  public lineChartLegend = true;
+  public lineChartType = 'line';
+  public lineChartLabels: Label[] = [];
 
   constructor(private ar: ActivatedRoute, private CountryService: CountryService, private route: Router, private datePipe: DatePipe) {
     this.ar.paramMap.subscribe(res => this.contrycode = (res.get('id')));
     this.ar.paramMap.subscribe(res => this.Country = Object(this.route.getCurrentNavigation().extras.state));
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
-    var myCurrentDate = new Date();
-    var myPastDate = new Date(myCurrentDate);
-    myPastDate.setDate(myPastDate.getDate() - 7);
-    this.myDate = new Date();
 
-    this.today = this.datePipe.transform(this.myDate, 'yyyy-MM-dd');
-    this.seven = this.datePipe.transform(myPastDate, 'yyyy-MM-dd');
 
 
 
@@ -181,57 +150,137 @@ export class CountryComponent implements OnInit {
     this.CountryService.updatePolicy(key, value)
   }
 
-
-
-
   getagetTotalydate() {
-    return this.CountryService.getTotalydate(this.contrycode, this.seven, this.today).subscribe(
-      data => {
-        this.Countries = data;
-        console.log("7 days")
-        console.log(this.contrycode)
-        console.log(this.seven)
-        console.log(this.today)
-        console.log(this.Countries)
-      },
-      err => console.error(err),
-      () => {
-        for (let i = 0; i <= this.Countries.length; i++) {
-          this.barChartData = [
-            { data: [this.Countries[i].Deaths, this.Countries[i + 1].Deaths, this.Countries[i + 2].Deaths, this.Countries[i + 3].Deaths, this.Countries[i + 4].Deaths, this.Countries[i + 5].Deaths, this.Countries[i + 6].Deaths], label: 'Daily Deaths' },
-            { data: [this.Countries[i].Recovered, this.Countries[i + 1].Recovered, this.Countries[i + 2].Recovered, this.Countries[i + 3].Recovered, this.Countries[i + 4].Recovered, this.Countries[i + 5].Recovered, this.Countries[i + 6].Recovered], label: 'Daily Recovered' },
-            { data: [this.Countries[i].Confirmed, this.Countries[i + 1].Confirmed, this.Countries[i + 2].Confirmed, this.Countries[i + 3].Confirmed, this.Countries[i + 4].Confirmed, this.Countries[i + 5].Confirmed, this.Countries[i + 6].Confirmed], label: 'Daily New Cases' }
 
-          ]
+    this.barChartLabels = this.betweendates()
 
-        }
-      }
-    );
+    this.barChartData = [
+      { data: this.TotalDeathsseven(), label: 'Daily Deaths' },
+      { data: this.getTotalRecoveredseven(), label: 'Daily Recovered' },
+      { data: this.getConfirmedTotalseven(), label: 'Daily New Cases' }
+    ]
   }
 
   getdayone() {
-    return this.CountryService.getdayOne(this.contrycode).subscribe(
-      data => {
-        this.Countriess = data;
-      },
-      err => console.error(err),
-      () => {
-        for (var key in this.Countriess) {
-          this.Death.push(this.Countriess[key].Deaths)
-          this.Recovered.push(this.Countriess[key].Recovered)
-          this.Confirmed.push(this.Countriess[key].Confirmed)
-        }
-        console.log("logging deaths")
-        console.log(this.Death);
-        this.lineChartData = [
-          { data: this.Death, label: 'Total Deaths' },
-          { data: this.Recovered, label: 'Total Recovered' },
-          { data: this.Confirmed, label: 'Total Cases' }
-        ]
-      }
-    );
+
+    this.lineChartLabels = this.totalbetweendates()
+    this.lineChartData = [
+      { data: this.TotalDeaths(), label: 'Total Deaths' },
+      { data: this.getTotalRecovered(), label: 'Total Recovered' },
+      { data: this.getConfirmedTotal(), label: 'Total Cases' }
+    ]
+
   }
 
 
+  getConfirmedTotal() {
+    var cleandata = []
+    this.CountryService.getdayOne(this.contrycode).subscribe((data) => {
+      cleandata.push(data[0]['Confirmed'])
+      for (let i = 1; i <= data.length; i++) {
+        cleandata.push(cleandata[i - 1] + data[i]['Confirmed'])
+      }
+    }
+    )
+    return cleandata
+  }
+  getTotalRecovered() {
+    var cleandata = []
+    this.CountryService.getdayOne(this.contrycode).subscribe((data) => {
+      cleandata.push(data[0]['Recovered'])
+      for (let i = 1; i <= data.length; i++) {
+        cleandata.push(cleandata[i - 1] + data[i]['Recovered'])
+      }
+    }
+    )
+    return cleandata
+  }
+
+  TotalDeaths() {
+    var cleandata = []
+    this.CountryService.getdayOne(this.contrycode).subscribe((data) => {
+      cleandata.push(data[0]['Deaths'])
+      for (let i = 1; i <= data.length; i++) {
+        cleandata.push(cleandata[i - 1] + data[i]['Deaths'])
+      }
+    }
+    )
+    console.log("printing deaths")
+    console.log(cleandata)
+    return cleandata
+  }
+
+  TotalDeathsseven() {
+    var cleandata = []
+    this.CountryService.getdayOne(this.contrycode).subscribe((data) => {
+      for (let i = data.length - 7; i < data.length; i++) {
+        cleandata.push(data[i]['Deaths'])
+      }
+    }
+    )
+    console.log("printing deaths from seven")
+    console.log(cleandata)
+    return cleandata
+  }
+
+  betweendates() {
+    var tab = []
+    this.CountryService.getdayOne(this.contrycode).subscribe((data) => {
+      for (let i = data.length - 7; i < data.length; i++) {
+        var currentDate = new Date(data[0]['Date']);
+        var pastDate = new Date(data[0]['Date']);
+        var pipe = new DatePipe('en-US')
+        pastDate.setDate(currentDate.getDate() + i);
+        var from = pipe.transform(pastDate, 'dd-MMM')
+        tab.push(from)
+      }
+    })
+    return tab
+
+
+  }
+
+  totalbetweendates() {
+    var tab = []
+    this.CountryService.getdayOne(this.contrycode).subscribe((data) => {
+      for (let i = 0; i < data.length; i++) {
+        var currentDate = new Date(data[0]['Date']);
+        var pastDate = new Date(data[0]['Date']);
+        var pipe = new DatePipe('en-US')
+        pastDate.setDate(currentDate.getDate() + i);
+        var from = pipe.transform(pastDate, 'dd-MMM')
+        tab.push(from)
+      }
+    })
+    console.log("printingtab")
+    console.log(tab)
+    return tab
+
+
+  }
+  getTotalRecoveredseven() {
+    var cleandata = []
+    this.CountryService.getdayOne(this.contrycode).subscribe((data) => {
+      for (let i = data.length - 7; i < data.length; i++) {
+        cleandata.push(data[i]['Recovered'])
+      }
+    }
+    )
+    return cleandata
+  }
+
+  getConfirmedTotalseven() {
+    var cleandata = []
+    this.CountryService.getdayOne(this.contrycode).subscribe((data) => {
+      for (let i = data.length - 7; i < data.length; i++) {
+        cleandata.push(data[i]['Confirmed'])
+      }
+    }
+    )
+    return cleandata
+  }
 
 }
+
+
+

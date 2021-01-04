@@ -13,26 +13,26 @@
         <tr style="background-color:#FDE29D">
 
             <td> Total Cases</td>
-            <td>{{ Countryy.TotalConfirmed }}</td>
+            <td>{{ Countryy.TotalConfirmed | number:'1.0':'en-US'}}</td>
 
         </tr>
         <tr style="background-color:#FDE29D">
             <td> New Cases</td>
-            <td>{{ Countryy.NewConfirmed }}</td>
+            <td>{{ Countryy.NewConfirmed | number:'1.0':'en-US'}}</td>
         </tr>
         <tr style="background-color:#FDE29D">
             <td> Active Cases</td>
-            <td>{{ Countryy.TotalConfirmed - Countryy.TotalRecovered }}</td>
+            <td>{{ Countryy.TotalConfirmed - Countryy.TotalRecovered | number:'1.0':'en-US' }}</td>
         </tr>
         <tr style="background-color:#87C7F3">
 
             <td> Total Recovered</td>
-            <td>{{ Countryy.TotalRecovered }}</td>
+            <td>{{ Countryy.TotalRecovered | number:'1.0':'en-US'}}</td>
 
         </tr>
         <tr style="background-color:#87C7F3">
             <td> New Recovered</td>
-            <td>{{ Countryy.NewRecovered }}</td>
+            <td>{{ Countryy.NewRecovered | number:'1.0':'en-US'}}</td>
 
         </tr>
         <tr style="background-color:#87C7F3">
@@ -43,12 +43,12 @@
         <tr style="background-color:#ED97AB">
 
             <td> Total Deaths</td>
-            <td>{{ Countryy.TotalDeaths }}</td>
+            <td>{{ Countryy.TotalDeaths | number:'1.0':'en-US'}}</td>
 
         </tr>
         <tr style="background-color:#ED97AB">
             <td> New Deaths</td>
-            <td>{{ Countryy.NewDeaths }}</td>
+            <td>{{ Countryy.NewDeaths | number:'1.0':'en-US'}}</td>
 
         </tr>
         <tr style="background-color:#ED97AB">
@@ -91,8 +91,7 @@
 
 
     <div class="chartjs-container">
-        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
-            [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [chartType]="barChartType">
         </canvas>
     </div>
     <br>
@@ -109,10 +108,16 @@
     </table>
 
 
+
+
     <div class="chartjs-container">
-        <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
-            [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
-            [plugins]="lineChartPlugins" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+        <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [colors]="lineChartColors"
+            [chartType]="lineChartType">
         </canvas>
     </div>
+
+
+
+
+
 </div>

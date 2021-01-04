@@ -42,9 +42,6 @@ export class CountryService {
 
   }
 
-
-
-
   getnews() {
     return this.firestore.collection('news').valueChanges();
   }
@@ -52,9 +49,6 @@ export class CountryService {
   addnews(news: news) {
     return this.firestore.collection('news').add(news)
   }
-
-
-
 
   deletePolicy(CountryCode: string) {
     this.firestore.doc('countries/' + CountryCode).delete();
@@ -66,7 +60,6 @@ export class CountryService {
          .then(snapshot => setUserDetails(snapshot.data()))*/
   }
 
-
   getTotalydate(country: string, from: string, to: string): Observable<SingleCountry[]> {
     {
 
@@ -74,7 +67,6 @@ export class CountryService {
 
     }
   }
-
 
   getdayOne(country: string): Observable<SingleCountry[]> {
     {
