@@ -15,8 +15,8 @@ import { AuthService } from 'src/app/Services/auth.service';
 })
 export class NewsComponent implements OnInit {
 
-  Countries: Country[];
-  private newss
+  public Countries
+  public newss
   news: news[];
   new: news = {
     country: "",

@@ -47,14 +47,18 @@
   <div *ngIf="auth.user$ | async; then authenticated else guest">
     <!-- template will replace this div -->
   </div>
-  <center>
+
+  <div style="display: flex;justify-content:center;">
     <img
       src="https://firebasestorage.googleapis.com/v0/b/covid19-1fdd8.appspot.com/o/corona.png?alt=media&token=44be429c-5e4b-41e4-9e36-c675fda66533"
       width="40" height="40" alt="Corona icon"> <span style="font-size:150%;font-weight:bold;">COVID-19 </span>
-    <h4 style="color:#CECECE;">Live Updates and Statistics</h4>
 
+  </div>
 
-  </center>
+  <div style="display: flex;justify-content:center;">
+    <h4 style="color:#CECECE;"> Live Updates and Statistics</h4>
+  </div>
+
   <router-outlet>
   </router-outlet>
 </div>

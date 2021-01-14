@@ -33,7 +33,7 @@ export class CountryComponent implements OnInit {
   Dates: Array<string> = []
   boo: boolean = false;
 
-  private Countryy: Country = {
+  public Countryy: Country = {
     "Country": "",
     "CountryCode": "",
     "Slug": "",

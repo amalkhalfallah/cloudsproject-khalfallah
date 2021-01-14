@@ -40,7 +40,7 @@ export class WorldwideComponent implements OnInit {
   }
 
   Countries: Country[] = [];
-  AllCountries: Country[] = [];
+  public AllCountries
   Countriess: Country[];
 
 
